@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.index h1,
+.index h2,
+.index h3,
+.index h4,
+.index h5,
+.index h6 {
+    font-family: "ヒラギノ明朝 ProN W3", "HiraMinProN-W3", serif;
+    font-size: large;
+}

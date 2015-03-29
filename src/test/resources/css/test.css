@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+/* Universal Selector */
+* {
+    font-family: "ヒラギノ明朝 ProN W3", "HiraMinProN-W3", serif;
+    font-size: large;
+}
+/* Type Selector */
+body {
+    font-size: inherit;
+}
+
+/* Attribute Selectors */
+a[href] {
+    display: block;
+}
+
+a[href="../"] {
+    display: inline;
+}
+
+/* Groups of Selectors */
+h1, h2, h3, h4, h5, h6 {
+
+}
+
+.index h1,
+.index h2,
+.index h3,
+.index h4,
+.index h5,
+.index h6 {
+
+}
