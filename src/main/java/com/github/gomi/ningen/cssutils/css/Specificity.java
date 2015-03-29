@@ -1,14 +1,29 @@
 package com.github.gomi.ningen.cssutils.css;
 
+import com.helger.css.ECSSVersion;
+import com.helger.css.decl.ICSSSelectorMember;
+import com.helger.css.writer.CSSWriterSettings;
+import fj.Monoid;
+
+import java.util.List;
+
 /**
  * CSS Selector Specificity
  */
 public class Specificity implements Comparable<Specificity> {
 
+    /**
+     * a:
+     * b: number of id selectors which start with "#"
+     * c: number of class, attribute, and pseudo class selectors
+     * d: number of type, and pseudo element selectors
+     */
     final int a;
     final int b;
     final int c;
     final int d;
+
+    static final CSSWriterSettings cssWriterSettings = new CSSWriterSettings(ECSSVersion.CSS30);
 
     public static Specificity of(final int a, final int b, final int c, final int d) {
         return new Specificity(a, b, c, d);
@@ -18,7 +33,20 @@ public class Specificity implements Comparable<Specificity> {
         return new Specificity(b, c, d);
     }
 
-    private Specificity(final int a, final int b, final int c, final int d) {
+    public static Specificity of(final List<ICSSSelectorMember> selectorMembers) {
+        return null;
+    }
+
+    public static Specificity of(final ICSSSelectorMember selectorMember) {
+        return of(selectorMember.getAsCSSString(cssWriterSettings, 0));
+    }
+
+    public static Specificity of(final String selectorMember) {
+        if (selectorMember.startsWith("#")) return new Specificity(1, 0, 0);
+        return null;
+    }
+
+    Specificity(final int a, final int b, final int c, final int d) {
         if (a < 0 | b < 0 | c < 0 | d < 0)
             throw new IllegalArgumentException(String.format("specificity must be zero or positive number."));
 
@@ -46,6 +74,13 @@ public class Specificity implements Comparable<Specificity> {
 
     public int getD() {
         return d;
+    }
+
+    public static Monoid<Specificity> getSum() {
+        return Monoid.monoid(
+                (m1, m2) -> of(m1.a + m2.a, m1.b + m2.b, m1.c + m2.c, m1.d + m2.d), // sum
+                of(0, 0, 0, 0) // zero
+        );
     }
 
     @Override
