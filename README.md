@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/53ningen/css-utils.svg)](https://travis-ci.org/53ningen/css-utils)
+
 css-utils
 ==========
 
