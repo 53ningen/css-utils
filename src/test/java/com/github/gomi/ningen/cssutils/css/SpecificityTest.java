@@ -1,11 +1,10 @@
 package com.github.gomi.ningen.cssutils.css;
 
+import fj.Monoid;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SpecificityTest {
 
@@ -82,6 +81,31 @@ public class SpecificityTest {
         assertTrue(a.compareTo(b) > 0);
         assertTrue(b.compareTo(c) > 0);
         assertTrue(a.compareTo(c) > 0);
+    }
+
+    @Test
+    public void testSum() {
+        final Specificity a = Specificity.of(1, 1, 2, 1);
+        final Specificity b = Specificity.of(1, 1, 1, 2);
+        assertThat(Specificity.getSum().sum(a, b), is(Specificity.of(2, 2, 3, 3)));
+    }
+
+    @Test
+    public void testSumAssociativity() {
+        final Specificity a = Specificity.of(1, 2, 3, 4);
+        final Specificity b = Specificity.of(5, 6, 7, 8);
+        final Specificity c = Specificity.of(9,10,11,12);
+        final Monoid<Specificity> op = Specificity.getSum();
+        assertThat(op.sum(op.sum(a, b), c), is(op.sum(a, op.sum(b, c))));
+    }
+
+    @Test
+    public void testSumIdentity() {
+        final Specificity a = Specificity.of(1, 2, 3, 4);
+        final Monoid<Specificity> op = Specificity.getSum();
+        assertThat(op.sum(a, op.zero()), is(op.sum(op.zero(), a)));
+        assertThat(op.sum(a, op.zero()), is(a));
+        assertThat(op.sum(op.zero(), a), is(a));
     }
 
 }
